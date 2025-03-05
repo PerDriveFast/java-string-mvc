@@ -14,3 +14,4 @@ Fanpage “Hỏi Dân IT” : https://www.facebook.com/askITwithERIC/
 
 Udemy Hỏi Dân IT: https://www.udemy.com/user/eric-7039/
  -->
+HEllO, I'm Trung handsome boy
