@@ -5,21 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.hoidanit.laptopshop.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-// @Controller
-// public class UserController {
-
-// @GetMapping("/")
-
-// public String getHomePage() {
-
-// return "Hello from Controller";
-// }
-// }
-
-@RestController
+@Controller
 public class UserController {
 
     private UserService userService;
@@ -30,9 +20,29 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("")
-    public String getHomePage() {
-        return this.userService.handleHello();
-    }
+    @RequestMapping("/")
 
+    public String getHomePage() {
+        String test = this.userService.handleHello();
+        return "index.html";
+    }
 }
+
+// @RestController
+// public class UserController {
+
+// // DI: dependency injection
+// private UserService userService;
+
+// // source action -> generate contractor
+
+// public UserController(UserService userService) {
+// this.userService = userService;
+// }
+
+// @GetMapping("")
+// public String getHomePage() {
+// return this.userService.handleHello();
+// }
+
+// }
