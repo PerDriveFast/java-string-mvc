@@ -21,13 +21,20 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("/")
-
+    @RequestMapping("/client")
     public String getHomePage(Model model) {
         String test = this.userService.handleHello();
         model.addAttribute("trung", test);
         model.addAttribute("trungdanit", "from controller with model");
         return "hello";
+    }
+
+    @RequestMapping("/admin/user")
+    public String getUserPage(Model model) {
+        String test = this.userService.handleHello();
+        model.addAttribute("trung", test);
+        model.addAttribute("trungdanit", "from controller with model");
+        return "admin/user/create";
     }
 }
 
