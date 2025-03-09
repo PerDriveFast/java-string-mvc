@@ -1,14 +1,13 @@
 package vn.hoidanit.laptopshop.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
 import vn.hoidanit.laptopshop.service.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import vn.hoidanit.laptopshop.domain.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class UserController {
@@ -32,10 +31,16 @@ public class UserController {
     @RequestMapping("/admin/user")
     public String getUserPage(Model model) {
         String test = this.userService.handleHello();
-        model.addAttribute("trung", test);
-        model.addAttribute("trungdanit", "from controller with model");
+        model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
+
+    @RequestMapping(value = "/admin/user/create1", method = RequestMethod.POST)
+    public String CreateUserPage(Model model, @ModelAttribute("newUser") User user) {
+        System.out.println("run here" + user);
+        return "hello";
+    }
+
 }
 
 // @RestController
