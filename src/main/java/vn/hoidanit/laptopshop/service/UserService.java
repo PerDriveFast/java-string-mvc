@@ -25,6 +25,10 @@ public class UserService {
         return this.userRepository.findById(id);
     }
 
+    public void deleteUser(long id) {
+        this.userRepository.deleteById(id);
+    }
+
     public List<User> getAllUsersByEmail(String email) {
         return this.userRepository.findByEmail(email);
     }
