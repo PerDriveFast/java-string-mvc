@@ -24,7 +24,7 @@
                 <form:form method="post" action="/admin/user/create1" modelAttribute="newUser">
                      <div class="mb-3">
                         <label class="form-label">Email:</label>
-                        <form:input type="text" class="form-control" path="email"/>
+                        <form:input type="email" class="form-control" path="email"/>
                     </div>
                      <div class="mb-3">
                         <label class="form-label">Password:</label>
