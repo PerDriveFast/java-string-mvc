@@ -43,6 +43,7 @@
                         <form:input type="text" class="form-control" path="address"/>
                     </div>
                     <button type="submit" class="btn btn-warning">Create</button>
+                    <a href="/admin/user" class="btn btn-primary">Back</a>
                 </form:form>
             </div>
         </div>

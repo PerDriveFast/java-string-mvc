@@ -43,6 +43,7 @@
     </div>
     
     <button type="submit" class="btn btn-warning">Update</button>
+    <a href="/admin/user" class="btn btn-primary">Back</a>
 </form:form>
 
             </div>

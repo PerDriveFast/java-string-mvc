@@ -33,6 +33,8 @@
     <li class="list-group-item">Full_Name: ${user.fullName}</li>
   </ul>
 </div>
+<br>
+<a href="/admin/user" class="btn btn-primary">Back</a>
 
                                     </div>
                                 </div>
