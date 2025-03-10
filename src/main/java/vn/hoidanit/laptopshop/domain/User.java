@@ -22,6 +22,12 @@ public class User {
 
     public String phone;
 
+    private String avatar;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
     public long getId() {
         return id;
     }
@@ -70,11 +76,15 @@ public class User {
         this.phone = phone;
     }
 
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
-        return "User [getId()=" + getId() + ", getEmail()=" + getEmail() + ", getPassword()=" + getPassword()
-                + ", getFullName()=" + getFullName() + ", getAddress()=" + getAddress() + ", getPhone()=" + getPhone()
-                + "]";
+        return "User [getAvatar()=" + getAvatar() + ", getId()=" + getId() + ", getEmail()=" + getEmail()
+                + ", getPassword()=" + getPassword() + ", getFullName()=" + getFullName() + ", getAddress()="
+                + getAddress() + ", getPhone()=" + getPhone() + "]";
     }
 
 }
