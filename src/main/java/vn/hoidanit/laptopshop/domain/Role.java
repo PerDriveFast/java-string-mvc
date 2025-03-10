@@ -1,12 +1,16 @@
 package vn.hoidanit.laptopshop.domain;
 
-import jakarta.annotation.Generated;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "roles")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +20,10 @@ public class Role {
     public String name;
 
     public String description;
+
+    // Role - one => many - users / ctrl + k . press s
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
 
     public long getId() {
         return id;

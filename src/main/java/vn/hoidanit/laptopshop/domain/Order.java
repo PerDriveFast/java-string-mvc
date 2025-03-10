@@ -4,8 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -13,24 +18,21 @@ public class Order {
 
     public long id;
 
-    public long userId;
-
     public double totalPrice;
+
+    // user id
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public long getId() {
         return id;
     }
 
+    // user id
+
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
     }
 
     public double getTotalPrice() {
@@ -43,7 +45,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order [id=" + id + ", userId=" + userId + ", totalPrice=" + totalPrice + "]";
+        return "Order [id=" + id + ", totalPrice=" + totalPrice + "]";
     }
 
 }
