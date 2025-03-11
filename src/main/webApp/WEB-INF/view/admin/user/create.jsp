@@ -47,20 +47,20 @@
                                             <h3>Create a user</h3>
                                             <hr>
                                             <form:form method="post" action="/admin/user/create1"
-                                                modelAttribute="newUser">
-                                                <div class="mb-3">
+                                                modelAttribute="newUser" class="row" enctype="multipart/form-data">
+                                                <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Email:</label>
                                                     <form:input type="email" class="form-control" path="email" />
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Password:</label>
                                                     <form:input type="Password" class="form-control" path="password" />
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Phone Number:</label>
                                                     <form:input type="number" class="form-control" path="phone" />
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Full Name:</label>
                                                     <form:input type="text" class="form-control" path="fullName" />
                                                 </div>
@@ -71,16 +71,17 @@
                                                 <div class="row g-3">
                                                     <div class="col">
                                                         <label class="form-label">Role:</label>
-                                                        <select class="form-select" aria-label="Default select example">
-                                                            <option value="ADMIN">ADMIN</option>
-                                                            <option value="USER">USER</option>
-                                                        </select>
+                                                        <form:select class="form-select"
+                                                            aria-label="Default select example" path="role.name">
+                                                            <form:option value="ADMIN">ADMIN</form:option>
+                                                            <form:option value="USER">USER</form:option>
+                                                        </form:select>
                                                     </div>
                                                     <div class="col">
                                                         <div class="mb-3">
                                                             <label for="avatarFile" class="form-label">Avatar</label>
                                                             <input class="form-control" type="file" id="avatarFile"
-                                                                accept=".png, .jpg, .jpeg" />
+                                                                accept=".png, .jpg, .jpeg" name="hoidanitFile" />
                                                         </div>
                                                     </div>
                                                     <div class="col-12 mb-3">
