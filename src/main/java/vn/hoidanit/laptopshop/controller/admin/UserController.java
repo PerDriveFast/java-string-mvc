@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
+import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
 
 import vn.hoidanit.laptopshop.domain.User;
@@ -25,14 +26,14 @@ import jakarta.servlet.ServletContext;
 @Controller
 public class UserController {
 
-    private final ServletContext servletContext;
     private final UserService userService;
+    private final UploadService uploadService;
     // private final UserRepository userRepository;
     // source action -> generate contractor
 
-    public UserController(UserService userService, ServletContext servletContext) {
+    public UserController(UserService userService, UploadService uploadService) {
         this.userService = userService;
-        this.servletContext = servletContext;
+        this.uploadService = uploadService;
         // this.userRepository = userRepository;
     }
 
@@ -89,28 +90,8 @@ public class UserController {
     @PostMapping("/admin/user/create1")
     public String CreateUserPage(Model model, @ModelAttribute("newUser") User user,
             @RequestParam("hoidanitFile") MultipartFile file) {
-        try {
-            byte[] bytes;
-            bytes = file.getBytes();
 
-            String rootPath = this.servletContext.getRealPath("/resources/images");
-
-            File dir = new File(rootPath + File.separator + "avatar");
-            if (!dir.exists())
-                dir.mkdirs();
-
-            // Create the file on server
-            File serverFile = new File(dir.getAbsolutePath() + File.separator +
-                    +System.currentTimeMillis() + "-" + file.getOriginalFilename());
-
-            BufferedOutputStream stream = new BufferedOutputStream(
-                    new FileOutputStream(serverFile));
-            stream.write(bytes);
-            stream.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
         // this.userService.handleSaveUser(user);
         return "redirect:/admin/user";
     }
