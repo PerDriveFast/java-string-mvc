@@ -5,9 +5,6 @@ import vn.hoidanit.laptopshop.service.UserService;
 import vn.hoidanit.laptopshop.domain.Role;
 import vn.hoidanit.laptopshop.domain.User;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
