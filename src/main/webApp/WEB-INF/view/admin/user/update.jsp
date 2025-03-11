@@ -34,7 +34,7 @@
                                             <h3>Update User </h3>
                                             <hr>
                                             <form:form method="post" action="/admin/user/update"
-                                                modelAttribute="newUser">
+                                                modelAttribute="newUser" enctype="multipart/form-data">
                                                 <!-- Trường ID ẩn để đảm bảo gửi dữ liệu -->
                                                 <form:hidden path="id" />
 
@@ -55,7 +55,27 @@
                                                     <label class="form-label">Address:</label>
                                                     <form:input type="text" class="form-control" path="address" />
                                                 </div>
-
+                                                <div class="row g-3">
+                                                    <div class="col">
+                                                        <label class="form-label">Role:</label>
+                                                        <form:select class="form-select"
+                                                            aria-label="Default select example" path="role.name">
+                                                            <form:option value="ADMIN">ADMIN</form:option>
+                                                            <form:option value="USER">USER</form:option>
+                                                        </form:select>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3">
+                                                            <label for="avatarFile" class="form-label">Avatar</label>
+                                                            <input class="form-control" type="file" id="avatarFile"
+                                                                accept=".png, .jpg, .jpeg" name="hoidanitFile" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 mb-3">
+                                                        <img style="max-height: 250px; display: none;"
+                                                            alt="avatar preview" id="avatarPreview" />
+                                                    </div>
+                                                </div>
                                                 <button type="submit" class="btn btn-warning">Update</button>
                                                 <a href="/admin/user" class="btn btn-primary">Back</a>
                                             </form:form>

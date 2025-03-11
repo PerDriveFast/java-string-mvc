@@ -40,10 +40,36 @@
                                                     User Information
                                                 </div>
                                                 <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item">Id: ${id}</li>
-                                                    <li class="list-group-item">Email: ${user.email}</li>
-                                                    <li class="list-group-item">Full_Name: ${user.fullName}</li>
+                                                    <li class="list-group-item"><strong>Id:</strong> ${id}</li>
+                                                    <li class="list-group-item"><strong>Email:</strong> ${user.email}
+                                                    </li>
+                                                    <li class="list-group-item"><strong>Full Name:</strong>
+                                                        ${user.fullName}</li>
+                                                    <li class="list-group-item"><strong>Role:</strong> ${user.role.name}
+                                                    </li>
+                                                    <li class="list-group-item text-center">
+                                                        <strong>Avatar:</strong> <br>
+
+                                                        <c:choose>
+                                                            <c:when test="${not empty user.avatar}">
+                                                                <img src="/images/avatar/${user.avatar}"
+                                                                    alt="User Avatar" class="img-thumbnail mt-2 shadow"
+                                                                    style="max-width: 300px; border-radius: 10px;">
+                                                                <p class="mt-2 text-muted">
+                                                                    📁 Image file: <span
+                                                                        class="fw-bold">${user.avatar}</span>
+                                                                </p>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <p class="mt-2 text-danger"><i
+                                                                        class="fas fa-exclamation-circle"></i> Not yet
+                                                                    image</p>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </li>
+
                                                 </ul>
+
                                             </div>
                                             <br>
                                             <a href="/admin/user" class="btn btn-primary">Back</a>

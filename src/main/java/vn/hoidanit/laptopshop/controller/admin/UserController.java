@@ -2,9 +2,12 @@ package vn.hoidanit.laptopshop.controller.admin;
 
 import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
-
+import vn.hoidanit.laptopshop.domain.Role;
 import vn.hoidanit.laptopshop.domain.User;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -67,12 +70,28 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update")
-    public String PostUpdateUser(Model model, @ModelAttribute("newUser") User user) {
+    public String PostUpdateUser(Model model,
+            @ModelAttribute("newUser") User user,
+            @RequestParam(value = "hoidanitFile", required = false) MultipartFile file) {
+
         User currentUser = this.userService.getUsersById(user.getId());
+
         if (currentUser != null) {
             currentUser.setAddress(user.getAddress());
             currentUser.setFullName(user.getFullName());
             currentUser.setPhone(user.getPhone());
+
+            // Nếu có file mới, cập nhật avatar
+            if (file != null && !file.isEmpty()) {
+                String avatarPath = this.uploadService.handleSaveUploadFile(file, "avatar");
+                currentUser.setAvatar(avatarPath);
+            }
+
+            // Cập nhật Role
+            Role role = this.userService.getRoleByname(user.getRole().getName());
+            if (role != null) {
+                currentUser.setRole(role);
+            }
 
             this.userService.handleSaveUser(currentUser);
         }
