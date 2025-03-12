@@ -37,10 +37,6 @@ public class UserService {
         return this.userRepository.findByEmail(email);
     }
 
-    public String handleHello() {
-        return "Hello from Service";
-    }
-
     public User handleSaveUser(User user) {
         User eric = this.userRepository.save(user);
         System.out.println(eric);

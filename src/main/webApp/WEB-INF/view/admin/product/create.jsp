@@ -46,27 +46,54 @@
                                         <div class="col-md-6 col-12 mx-auto">
                                             <h3>Create a product</h3>
                                             <hr>
-                                            <form:form method="post" action="/admin/product" modelAttribute="newProduct"
-                                                class="row" enctype="multipart/form-data">
+                                            <form:form method="post" action="/admin/product/create"
+                                                modelAttribute="newProduct" class="row" enctype="multipart/form-data">
+                                                <c:set var="errorName">
+                                                    <form:errors path="name" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorPrice">
+                                                    <form:errors path="price" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorDetailDesc">
+                                                    <form:errors path="detailDesc" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorShortDesc">
+                                                    <form:errors path="shortDesc" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorQuantity">
+                                                    <form:errors path="quantity" cssClass="invalid-feedback" />
+                                                </c:set>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Name:</label>
-                                                    <form:input type="text" class="form-control" path="name" />
+                                                    <form:input type="text"
+                                                        class="form-control ${not empty errorName ? 'is-invalid' : (not empty product.name ? 'is-valid' : '')}"
+                                                        path="name" />
+
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Price:</label>
-                                                    <form:input type="number" class="form-control" path="price" />
+                                                    <form:input type="number"
+                                                        class="form-control ${not empty errorPrice ? 'is-invalid' : (not empty product.price ? 'is-valid' : '')}"
+                                                        path="price" />
                                                 </div>
                                                 <div class="mb-3 ">
                                                     <label class="form-label">Detail description:</label>
-                                                    <form:input type="text" class="form-control" path="detailDesc" />
+                                                    <form:input type="text"
+                                                        class="form-control ${not empty errorDetailDesc ? 'is-invalid' : (not empty product.detailDesc ? 'is-valid' : '')}"
+                                                        path="detailDesc" />
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Short description:</label>
-                                                    <form:input type="text" class="form-control" path="shortDesc" />
+                                                    <form:input type="text"
+                                                        class="form-control ${not empty errorShortDesc ? 'is-invalid' : (not empty product.shortDesc ? 'is-valid' : '')}"
+                                                        path="shortDesc" />
+
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Quantity:</label>
-                                                    <form:input type="number" class="form-control" path="quantity" />
+                                                    <form:input type="number"
+                                                        class="form-control ${not empty errorquantity ? 'is-invalid' : (not empty product.quantity ? 'is-valid' : '')}"
+                                                        path="quantity" />
                                                 </div>
 
                                                 <div class="row g-3">
@@ -74,19 +101,19 @@
                                                     <div class="col">
                                                         <label class="form-label">Factory:</label>
                                                         <form:select class="form-select"
-                                                            aria-label="Default select example" path="">
-                                                            <form:option value="ADMIN">Nho xanh</form:option>
-                                                            <form:option value="USER">Đu đủ</form:option>
-                                                            <form:option value="USER">Nho tím</form:option>
+                                                            aria-label="Default select example" path="factory">
+                                                            <form:option value="Nho Xanh">Nho xanh</form:option>
+                                                            <form:option value="Đu đủ">Đu đủ</form:option>
+                                                            <form:option value="Nho tím">Nho tím</form:option>
                                                         </form:select>
                                                     </div>
                                                     <div class="col">
                                                         <label class="form-label">Target:</label>
                                                         <form:select class="form-select"
-                                                            aria-label="Default select example" path="">
-                                                            <form:option value="theo-mua">Trái cây theo mùa
+                                                            aria-label="Default select example" path="target">
+                                                            <form:option value="Theo mùa">Trái cây theo mùa
                                                             </form:option>
-                                                            <form:option value="an-lien">Trái cây ăn liền</form:option>
+                                                            <form:option value="Ăn Liền">Trái cây ăn liền</form:option>
                                                         </form:select>
                                                     </div>
                                                     <div class="row g-3">
