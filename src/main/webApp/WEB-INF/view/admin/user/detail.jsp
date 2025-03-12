@@ -45,6 +45,8 @@
                                                     </li>
                                                     <li class="list-group-item"><strong>Full Name:</strong>
                                                         ${user.fullName}</li>
+                                                    <li class="list-group-item"><strong>Phone:</strong>
+                                                        ${user.phone}</li>
                                                     <li class="list-group-item"><strong>Role:</strong> ${user.role.name}
                                                     </li>
                                                     <li class="list-group-item text-center">

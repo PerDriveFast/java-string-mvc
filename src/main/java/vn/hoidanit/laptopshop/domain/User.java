@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -36,9 +37,12 @@ public class User {
     @Size(min = 2, message = "Họ và tên phải có ít nhất 2 ký tự")
     private String fullName;
 
-    public String address;
+    @NotEmpty(message = "Địa chỉ không được để trống")
+    private String address;
 
-    public String phone;
+    @NotEmpty(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "^(0[3-9][0-9]{8})$", message = "Số điện thoại không hợp lệ (bắt đầu bằng 03-09 và có 10 số)")
+    private String phone;
 
     private String avatar;
 
