@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
             <!DOCTYPE html>
             <html lang="en">
 
@@ -50,11 +51,21 @@
                                                 modelAttribute="newUser" class="row" enctype="multipart/form-data">
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Email:</label>
-                                                    <form:input type="email" class="form-control" path="email" />
+                                                    <form:input type="email" class="form-control is-invalid"
+                                                        path="email" />
+                                                    <form:errors path="email" cssClass="invalid-feedback" />
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Password:</label>
-                                                    <form:input type="Password" class="form-control" path="password" />
+                                                    <c:set var="nameHasBindError">
+                                                        <form:errors path="password" />
+                                                    </c:set>
+                                                    <form:input type="password"
+                                                        class="form-control ${not empty nameHasBindError? 'is-invalid':''}"
+                                                        path="password" />
+
+                                                    <form:errors path="password" cssClass="invalid-feedback" />
+
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Phone Number:</label>
@@ -62,8 +73,15 @@
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Full Name:</label>
-                                                    <form:input type="text" class="form-control" path="fullName" />
+                                                    <c:set var="nameHasBindError">
+                                                        <form:errors path="fullName" />
+                                                    </c:set>
+                                                    <form:input type="fullName"
+                                                        class="form-control ${not empty nameHasBindError? 'is-invalid':''}"
+                                                        path="fullName" />
+                                                    <form:errors path="fullName" cssClass="invalid-feedback" />
                                                 </div>
+
                                                 <div class="mb-3">
                                                     <label class="form-label">Address:</label>
                                                     <form:input type="text" class="form-control" path="address" />
@@ -94,6 +112,7 @@
                                                     <a href="/admin/user" class="btn btn-primary">Back</a>
                                                 </div>
                                             </form:form>
+
                                         </div>
                                     </div>
                                 </div>
