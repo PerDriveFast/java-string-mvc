@@ -51,6 +51,7 @@
                                 <h1 class="mt-4">Update Users</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                    <li class="breadcrumb-item "><a href="/admin/user">Users</a></li>
                                     <li class="breadcrumb-item active">Update Users</li>
                                 </ol>
                                 <div class="container mt-5">

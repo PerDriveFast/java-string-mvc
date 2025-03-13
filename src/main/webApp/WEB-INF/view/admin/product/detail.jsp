@@ -52,6 +52,7 @@
                                 <h1 class="mt-4">Detail Product</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+                                    <li class="breadcrumb-item "><a href="/admin/product">Products</a></li>
                                     <li class="breadcrumb-item active">Detail Products</li>
                                 </ol>
                                 <div class="container mt-5">
