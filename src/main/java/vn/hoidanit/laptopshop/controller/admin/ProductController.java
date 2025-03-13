@@ -97,29 +97,39 @@ public class ProductController {
 
     @PostMapping("/admin/product/update")
     public String PostUpdateProduct(Model model,
-            @ModelAttribute("newProduct") Product product,
+            @Valid @ModelAttribute("newProduct") Product product,
+            BindingResult bindingResult,
             @RequestParam(value = "hoidanitFile", required = false) MultipartFile file) {
 
         Product currentProduct = this.productService.getProductsById(product.getId());
 
+        if (bindingResult.hasErrors()) {
+            // Giữ lại ảnh cũ khi có lỗi
+            product.setImage(currentProduct.getImage());
+
+            model.addAttribute("newProduct", product);
+            return "admin/product/update"; // Trả về trang cập nhật để sửa lỗi
+        }
+
         if (currentProduct != null) {
             currentProduct.setDetailDesc(product.getDetailDesc());
+            currentProduct.setName(product.getName());
             currentProduct.setShortDesc(product.getShortDesc());
             currentProduct.setFactory(product.getFactory());
             currentProduct.setPrice(product.getPrice());
             currentProduct.setQuantity(product.getQuantity());
             currentProduct.setSold(product.getSold());
 
-            // Nếu có file mới, cập nhật avatar
+            // Nếu có file mới, cập nhật ảnh
             if (file != null && !file.isEmpty()) {
-                String avatarPath = this.uploadService.handleSaveUploadFile(file, "avatar");
+                String avatarPath = this.uploadService.handleSaveUploadFile(file, "product");
                 currentProduct.setImage(avatarPath);
             }
 
-            // Cập nhật Role
-
             this.productService.createProduct(currentProduct);
         }
+
         return "redirect:/admin/product";
     }
+
 }

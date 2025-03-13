@@ -92,7 +92,7 @@
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Quantity:</label>
                                                     <form:input type="number"
-                                                        class="form-control ${not empty errorquantity ? 'is-invalid' : (not empty product.quantity ? 'is-valid' : '')}"
+                                                        class="form-control ${not empty errorQuantity ? 'is-invalid' : (not empty product.quantity ? 'is-valid' : '')}"
                                                         path="quantity" />
                                                 </div>
 

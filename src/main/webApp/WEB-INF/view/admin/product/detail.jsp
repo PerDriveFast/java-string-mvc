@@ -10,9 +10,35 @@
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
                 <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
                 <meta name="author" content="Hỏi Dân IT" />
-                <title>Details Users</title>
+                <title>Details Products</title>
                 <link href="/css/styles.css" rel="stylesheet" />
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+                <!-- Thêm jQuery từ Google CDN -->
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+                <script>
+                    $(document).ready(() => {
+                        const avatarFile = $("#avatarFile");
+                        const avatarPreview = $("#avatarPreview");
+
+                        // Kiểm tra và hiển thị ảnh gốc nếu có
+                        const orgImage = "${newProduct.image}";
+                        if (orgImage && orgImage.trim() !== "") {
+                            const urlImage = "/images/product/" + orgImage;
+                            avatarPreview.attr("src", urlImage).css("display", "block");
+                        }
+
+                        // Khi chọn ảnh mới, hiển thị ngay lập tức
+                        avatarFile.change(function (e) {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const imgURL = URL.createObjectURL(file);
+                                avatarPreview.attr("src", imgURL).css("display", "block");
+                            }
+                        });
+                    });
+                </script>
+
             </head>
 
             <body class="sb-nav-fixed">
@@ -23,16 +49,16 @@
                     <div id="layoutSidenav_content">
                         <main>
                             <div class="container-fluid px-4">
-                                <h1 class="mt-4">Detail Users</h1>
+                                <h1 class="mt-4">Detail Product</h1>
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-                                    <li class="breadcrumb-item active">Detail Users</li>
+                                    <li class="breadcrumb-item active">Detail Products</li>
                                 </ol>
                                 <div class="container mt-5">
                                     <div class="row">
                                         <div class="col-12 mx-auto">
                                             <div class="d-flex justify-content-between">
-                                                <h3>User Detail: ${id}</h3>
+                                                <h3>Product Detail: ${id}</h3>
                                             </div>
                                             <hr>
                                             <div class="card" style="width: 60%;">
@@ -62,13 +88,15 @@
                                                     <li class="list-group-item"><strong>Target:</strong>
                                                         ${product.target}
                                                     </li>
+
                                                     <li class="list-group-item text-center">
-                                                        <strong>Avatar:</strong> <br>
+                                                        <strong>Image:</strong> <br>
 
                                                         <c:choose>
                                                             <c:when test="${not empty product.image}">
                                                                 <img src="/images/product/${product.image}"
-                                                                    alt="User Avatar" class="img-thumbnail mt-2 shadow"
+                                                                    alt="Product Image"
+                                                                    class="img-thumbnail mt-2 shadow"
                                                                     style="max-width: 300px; border-radius: 10px;">
                                                                 <p class="mt-2 text-muted">
                                                                     📁 Image file: <span

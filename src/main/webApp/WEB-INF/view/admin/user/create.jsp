@@ -21,6 +21,13 @@
                     <script>
                         $(document).ready(() => {
                             const avatarFile = $("#avatarFile");
+                            const orgImage = "${newProduct.image}";
+                            if (orgImage) {
+                                const urlImage = "/images/product/" + orgImage;
+                                $("#avatarPreview").attr("src", urlImage);
+                                $("avatarPreview").css("display", "block");
+                            }
+
                             avatarFile.change(function (e) {
                                 const imgURL = URL.createObjectURL(e.target.files[0]);
                                 $("#avatarPreview").attr("src", imgURL);
@@ -90,7 +97,7 @@
                                                         <c:set var="phoneError">
                                                             <form:errors path="phone" />
                                                         </c:set>
-                                                        <form:input type="text"
+                                                        <form:input type="number"
                                                             class="form-control ${not empty phoneError ? 'is-invalid' : (not empty user.phone ? 'is-valid' : '')}"
                                                             path="phone" />
                                                         <form:errors path="phone" cssClass="invalid-feedback" />

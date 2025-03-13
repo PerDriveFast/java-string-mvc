@@ -72,13 +72,22 @@ public class UserController {
 
     @PostMapping("/admin/user/update")
     public String PostUpdateUser(Model model,
-            @ModelAttribute("newUser") User user,
+            @Valid @ModelAttribute("newUser") User user, // Thêm @Valid trước User
+            BindingResult bindingResultUser,
             @RequestParam(value = "hoidanitFile", required = false) MultipartFile file) {
 
         User currentUser = this.userService.getUsersById(user.getId());
 
+        if (bindingResultUser.hasErrors()) {
+            // Giữ lại ảnh cũ khi có lỗi
+            user.setAvatar(currentUser.getAvatar());
+            model.addAttribute("newUser", user);
+            return "admin/user/update"; // Trả về trang cập nhật để sửa lỗi
+        }
+
         if (currentUser != null) {
             currentUser.setAddress(user.getAddress());
+            currentUser.setEmail(user.getEmail());
             currentUser.setFullName(user.getFullName());
             currentUser.setPhone(user.getPhone());
 
@@ -89,13 +98,16 @@ public class UserController {
             }
 
             // Cập nhật Role
-            Role role = this.userService.getRoleByname(user.getRole().getName());
-            if (role != null) {
-                currentUser.setRole(role);
+            if (user.getRole() != null && user.getRole().getName() != null) {
+                Role role = this.userService.getRoleByname(user.getRole().getName());
+                if (role != null) {
+                    currentUser.setRole(role);
+                }
             }
 
             this.userService.handleSaveUser(currentUser);
         }
+
         return "redirect:/admin/user";
     }
 

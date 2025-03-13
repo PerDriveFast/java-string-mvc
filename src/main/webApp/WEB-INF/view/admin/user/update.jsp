@@ -13,6 +13,31 @@
                 <title>Update User</title>
                 <link href="/css/styles.css" rel="stylesheet" />
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+                <script>
+                    $(document).ready(() => {
+                        const avatarFile = $("#avatarFile");
+                        const avatarPreview = $("#avatarPreview");
+
+                        // Kiểm tra và hiển thị ảnh gốc nếu có
+                        const orgImage = "${newUser.avatar}";
+                        if (orgImage && orgImage.trim() !== "") {
+                            const urlImage = "/images/avatar/" + orgImage;
+                            avatarPreview.attr("src", urlImage).css("display", "block");
+                        }
+
+                        // Khi chọn ảnh mới, hiển thị ngay lập tức
+                        avatarFile.change(function (e) {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const imgURL = URL.createObjectURL(file);
+                                avatarPreview.attr("src", imgURL).css("display", "block");
+                            }
+                        });
+                    });
+
+                </script>
             </head>
 
             <body class="sb-nav-fixed">
@@ -37,26 +62,54 @@
                                                 modelAttribute="newUser" enctype="multipart/form-data">
                                                 <!-- Trường ID ẩn để đảm bảo gửi dữ liệu -->
                                                 <form:hidden path="id" />
+                                                <c:set var="errorEmail">
+                                                    <form:errors path="email" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorFullName">
+                                                    <form:errors path="fullName" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorPhone">
+                                                    <form:errors path="phone" cssClass="invalid-feedback" />
+                                                </c:set>
+                                                <c:set var="errorAddress">
+                                                    <form:errors path="address" cssClass="invalid-feedback" />
+                                                </c:set>
 
-                                                <div class="mb-3">
-                                                    <label class="form-label">Email:</label>
-                                                    <form:input type="email" disabled="true" class="form-control"
-                                                        path="email" />
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Phone Number:</label>
-                                                    <form:input type="number" class="form-control" path="phone" />
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Full Name:</label>
-                                                    <form:input type="text" class="form-control" path="fullName" />
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Address:</label>
-                                                    <form:input type="text" class="form-control" path="address" />
+                                                <div class="row g-3">
+                                                    <div class="mb-3 col-12 col-md-6">
+                                                        <label class="form-label">Email:</label>
+                                                        <form:input type="text"
+                                                            class="form-control ${not empty errorEmail ? 'is-invalid' : (not empty user.email ? 'is-valid' : '')}"
+                                                            path="email" />
+
+                                                    </div>
+                                                    <div class="mb-3 col-12 col-md-6">
+                                                        <label class="form-label">Full Name:</label>
+                                                        <form:input type="text"
+                                                            class="form-control ${not empty errorFullName ? 'is-invalid' : (not empty user.fullName ? 'is-valid' : '')}"
+                                                            path="fullName" />
+
+                                                    </div>
                                                 </div>
                                                 <div class="row g-3">
-                                                    <div class="col">
+
+                                                    <div class="mb-3 col-12 col-md-6">
+                                                        <label class="form-label">Phone Number:</label>
+                                                        <form:input type="number"
+                                                            class="form-control ${not empty errorPhone ? 'is-invalid' : (not empty user.phone ? 'is-valid' : '')}"
+                                                            path="phone" />
+                                                    </div>
+
+                                                    <div class="mb-3 col-12 col-md-6">
+                                                        <label class="form-label">Address:</label>
+                                                        <form:input type="text"
+                                                            class="form-control ${not empty errorAddress ? 'is-invalid' : (not empty user.address ? 'is-valid' : '')}"
+                                                            path="address" />
+
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3">
+                                                    <div class="col col-12 col-md-6">
                                                         <label class="form-label">Role:</label>
                                                         <form:select class="form-select"
                                                             aria-label="Default select example" path="role.name">
@@ -64,18 +117,20 @@
                                                             <form:option value="USER">USER</form:option>
                                                         </form:select>
                                                     </div>
-                                                    <div class="col">
-                                                        <div class="mb-3">
-                                                            <label for="avatarFile" class="form-label">Avatar</label>
-                                                            <input class="form-control" type="file" id="avatarFile"
-                                                                accept=".png, .jpg, .jpeg" name="hoidanitFile" />
-                                                        </div>
+                                                </div>
+                                                <br>
+                                                <div class="row g-3">
+                                                    <div class="mb-3">
+                                                        <label for="avatarFile" class="form-label">Avatar:</label>
+                                                        <input class="form-control" type="file" id="avatarFile"
+                                                            accept=".png, .jpg, .jpeg" name="hoidanitFile" />
                                                     </div>
                                                     <div class="col-12 mb-3">
                                                         <img style="max-height: 250px; display: none;"
                                                             alt="avatar preview" id="avatarPreview" />
                                                     </div>
                                                 </div>
+
                                                 <button type="submit" class="btn btn-warning">Update</button>
                                                 <a href="/admin/user" class="btn btn-primary">Back</a>
                                             </form:form>
