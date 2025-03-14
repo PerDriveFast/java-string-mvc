@@ -120,20 +120,25 @@
                                                         <label class="form-label">Factory:</label>
                                                         <form:select class="form-select"
                                                             aria-label="Default select example" path="factory">
-                                                            <form:option value="Nho Xanh">Nho xanh</form:option>
-                                                            <form:option value="Đu đủ">Đu đủ</form:option>
-                                                            <form:option value="Nho tím">Nho tím</form:option>
+                                                            <form:option value="MienTay">Miền Tây</form:option>
+                                                            <form:option value="MienTrung">Miền Trung</form:option>
+                                                            <form:option value="MienBac">Miền Bắc</form:option>
                                                         </form:select>
                                                     </div>
+
                                                     <div class="col">
                                                         <label class="form-label">Target:</label>
                                                         <form:select class="form-select"
                                                             aria-label="Default select example" path="target">
-                                                            <form:option value="Theo mùa">Trái cây theo mùa
+                                                            <form:option value="ban-le">Khách mua lẻ</form:option>
+                                                            <form:option value="nha-hang">Nhà hàng & Quán ăn
                                                             </form:option>
-                                                            <form:option value="Ăn Liền">Trái cây ăn liền</form:option>
+                                                            <form:option value="sieu-thi">Siêu thị & Cửa hàng
+                                                            </form:option>
                                                         </form:select>
                                                     </div>
+
+
                                                 </div>
                                                 <div class="col">
                                                     <div class="mb-3  col-12 col-md-6">

@@ -77,7 +77,7 @@
                                                     <li class="list-group-item"><strong>ShortDesc:</strong>
                                                         ${product.shortDesc}
                                                     </li>
-                                                    <li class="list-group-item"><strong>quantity:</strong>
+                                                    <li class="list-group-item"><strong>Quantity:</strong>
                                                         ${product.quantity}
                                                     </li>
                                                     <li class="list-group-item"><strong>Sold:</strong>
