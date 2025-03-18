@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.controller.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +59,8 @@ public class ItemController {
 
         Cart cart = this.productService.fetchByUser(currentUser);
 
-        List<CartDetail> cartDetailList = cart.getCartDetails();
+        // List<CartDetail> cartDetailList = cart.getCartDetails();
+        List<CartDetail> cartDetailList = cart == null ? new ArrayList<>() : cart.getCartDetails();
 
         double totalPrice = 0;
         for (CartDetail cd : cartDetailList) {
