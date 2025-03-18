@@ -60,6 +60,16 @@ public class CustomerSuccessHandler implements AuthenticationSuccessHandler {
             session.setAttribute("avatar", user.getAvatar());
             session.setAttribute("id", user.getId());
             session.setAttribute("email", user.getEmail());
+
+            int sum = user.getCart() == null ? 0 : user.getCart().getSum();
+            session.setAttribute("sum", sum);
+
+            // if (user.getCart() != null) {
+            // int sumCart = user.getCart().getSum();
+            // session.setAttribute("sum", sumCart);
+            // } else
+            // session.setAttribute("sum", 0);
+
         }
     }
 
