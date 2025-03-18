@@ -68,9 +68,17 @@ public class ItemController {
         }
         model.addAttribute("cartDetails", cartDetailList);
         model.addAttribute("totalPrice", totalPrice);
-        // model.addAttribute("cart", cart);
+        model.addAttribute("cart", cart);
 
         return "client/cart/show";
+    }
+
+    @PostMapping("/delete-cart-product/{id}")
+    public String deleteCartDetail(@PathVariable Long id, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        long cartDetailId = id;
+        this.productService.handleRemoveCartDetail(cartDetailId, session);
+        return "redirect:/cart";
     }
 
 }

@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.service;
 
+import vn.hoidanit.laptopshop.controller.admin.DashboardController;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Product;
@@ -12,14 +13,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Service
 
 public class ProductService {
+
+    private final SecurityFilterChain filterChain;
+
+    private final DashboardController dashboardController;
+
+    private final CustomUserDetailsService customUserDetailsService;
 
     private final AuthenticationSuccessHandler customSuccessHandler;
 
@@ -34,13 +43,17 @@ public class ProductService {
             CartRepository cartRepository,
             CartDetailRepository cartDetailRepository,
             UserService userService, DaoAuthenticationProvider authProvider,
-            AuthenticationSuccessHandler customSuccessHandler) {
+            AuthenticationSuccessHandler customSuccessHandler, CustomUserDetailsService customUserDetailsService,
+            DashboardController dashboardController, SecurityFilterChain filterChain) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.cartDetailRepository = cartDetailRepository;
         this.userService = userService;
         this.authProvider = authProvider;
         this.customSuccessHandler = customSuccessHandler;
+        this.customUserDetailsService = customUserDetailsService;
+        this.dashboardController = dashboardController;
+        this.filterChain = filterChain;
     }
 
     public List<Product> fetchProducts() {
@@ -61,6 +74,33 @@ public class ProductService {
 
     public Cart fetchByUser(User user) {
         return this.cartRepository.findByUser(user);
+    }
+
+    public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
+        Optional<CartDetail> cartDetailOptional = this.cartDetailRepository.findById(cartDetailId);
+
+        if (cartDetailOptional.isPresent()) {
+            CartDetail cartDetail = cartDetailOptional.get();
+            Cart cart = cartDetail.getCart();
+
+            // Kiểm tra nếu cart null
+            if (cart == null) {
+                throw new RuntimeException("Cart is null for CartDetail ID: " + cartDetailId);
+            }
+
+            // Xóa cartDetail
+            this.cartDetailRepository.deleteById(cartDetailId);
+
+            int cartSum = cart.getSum();
+            if (cartSum > 1) {
+                cart.setSum(cartSum - 1);
+                session.setAttribute("sum", cart.getSum());
+                this.cartRepository.save(cart);
+            } else {
+                this.cartRepository.deleteById(cart.getId());
+                session.setAttribute("sum", 0);
+            }
+        }
     }
 
     public void handleAddProductToCart(String email, long productId, HttpSession session) {
