@@ -50,8 +50,8 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User[id=%s, email=%s, password=%s, fullName=%s, address=%s, phone=%s]",
-                id, email, password, fullName, address, phone);
+        return String.format("User[id=%s, email=%s, password=%s, fullName=%s, address=%s, phone=%s],cart=%s]",
+                id, email, password, fullName, address, phone, cart);
     }
 
     public Role getRole() {

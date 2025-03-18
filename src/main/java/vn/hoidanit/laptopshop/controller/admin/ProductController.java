@@ -66,7 +66,7 @@ public class ProductController {
 
     @RequestMapping("/admin/product/{id}")
     public String getProductDetailPage(Model model, @PathVariable long id) {
-        Product product = this.productService.getProductsById(id);
+        Product product = this.productService.getProductsById(id).get();
         model.addAttribute("product", product);
         model.addAttribute("id", id);
         return "admin/product/detail";
@@ -89,7 +89,7 @@ public class ProductController {
 
     @RequestMapping("/admin/product/update/{id}")
     public String getUpdateProductPage(Model model, @PathVariable long id) {
-        Product currentProduct = this.productService.getProductsById(id);
+        Product currentProduct = this.productService.getProductsById(id).get();
         model.addAttribute("newProduct", currentProduct);
         return "admin/product/update";
     }
@@ -100,7 +100,7 @@ public class ProductController {
             BindingResult bindingResult,
             @RequestParam(value = "hoidanitFile", required = false) MultipartFile file) {
 
-        Product currentProduct = this.productService.getProductsById(product.getId());
+        Product currentProduct = this.productService.getProductsById(product.getId()).get();
 
         if (bindingResult.hasErrors()) {
             // Giữ lại ảnh cũ khi có lỗi
