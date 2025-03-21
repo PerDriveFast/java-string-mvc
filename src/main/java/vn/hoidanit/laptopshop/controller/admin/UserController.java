@@ -64,46 +64,35 @@ public class UserController {
     }
 
     @RequestMapping("/admin/user/update/{id}")
-    public String getUpdateUserPage(Model model, @PathVariable long id) {
+    public String getUpdateUserPage(Model model, @PathVariable Long id) {
         User currentUser = this.userService.getUsersById(id);
         model.addAttribute("newUser", currentUser);
         return "admin/user/update";
     }
 
     @PostMapping("/admin/user/update")
-    public String PostUpdateUser(Model model,
-            @Valid @ModelAttribute("newUser") User user, // Thêm @Valid trước User
-            BindingResult bindingResultUser,
-            @RequestParam(value = "hoidanitFile", required = false) MultipartFile file) {
+    public String updateUser(Model model,
+            @ModelAttribute("userUpdate") @Valid User userU,
+            BindingResult userBindingResult,
+            @RequestParam("hoidanitFile") MultipartFile file) {
 
-        User currentUser = this.userService.getUsersById(user.getId());
-
-        if (bindingResultUser.hasErrors()) {
-            // Giữ lại ảnh cũ khi có lỗi
-            user.setAvatar(currentUser.getAvatar());
-            model.addAttribute("newUser", user);
-            return "admin/user/update"; // Trả về trang cập nhật để sửa lỗi
+        List<FieldError> errors = userBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(">>> " + error.getField() + " - " + error.getDefaultMessage());
+        }
+        if (userBindingResult.hasFieldErrors("fullName")) {
+            return "admin/user/update";
         }
 
+        User currentUser = this.userService.getUsersById(userU.getId());
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+
         if (currentUser != null) {
-            currentUser.setAddress(user.getAddress());
-            currentUser.setEmail(user.getEmail());
-            currentUser.setFullName(user.getFullName());
-            currentUser.setPhone(user.getPhone());
-
-            // Nếu có file mới, cập nhật avatar
-            if (file != null && !file.isEmpty()) {
-                String avatarPath = this.uploadService.handleSaveUploadFile(file, "avatar");
-                currentUser.setAvatar(avatarPath);
-            }
-
-            // Cập nhật Role
-            if (user.getRole() != null && user.getRole().getName() != null) {
-                Role role = this.userService.getRoleByname(user.getRole().getName());
-                if (role != null) {
-                    currentUser.setRole(role);
-                }
-            }
+            currentUser.setFullName(userU.getFullName());
+            currentUser.setAddress(userU.getAddress());
+            currentUser.setPhone(userU.getPhone());
+            currentUser.setRole(this.userService.getRoleByname(userU.getRole().getName()));
+            currentUser.setAvatar(avatar);
 
             this.userService.handleSaveUser(currentUser);
         }
