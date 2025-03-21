@@ -73,11 +73,11 @@ public class ProductService {
         return this.productRepository.findAll();
     }
 
-    public Optional<Product> getProductsById(long id) {
+    public Optional<Product> getProductById(Long id) {
         return this.productRepository.findById(id);
     }
 
-    public void deleteProduct(long id) {
+    public void deleteProduct(Long id) {
         this.productRepository.deleteById(id);
     }
 
@@ -86,6 +86,10 @@ public class ProductService {
     }
 
     public Cart fetchByUser(User user) {
+        return this.cartRepository.findByUser(user);
+    }
+
+    public Cart getCartByUser(User user) {
         return this.cartRepository.findByUser(user);
     }
 
@@ -116,58 +120,50 @@ public class ProductService {
         }
     }
 
-    public void handleAddProductToCart(String email, long productId, HttpSession session) {
-        // check user đã có cart chưa ? nếu chưa -> tạo mới
+    public void handleAddProductToCart(String email, long productId, HttpSession session, long quantity) {
+
         User user = this.userService.getUserByEmail(email);
-
+        // Check has user had cart? Not yet -> create new one
         if (user != null) {
-
             Cart cart = this.cartRepository.findByUser(user);
-
             if (cart == null) {
-                Cart otherCart = new Cart();
-                otherCart.setUser(user);
-                otherCart.setSum(0);
+                Cart newCart = new Cart();
+                newCart.setUser(user);
+                newCart.setSum(0);
 
-                this.cartRepository.save(otherCart);
+                cart = this.cartRepository.save(newCart);
             }
 
-            // search for product id
-
-            Optional<Product> producOptional = this.productRepository.findById(productId);
-            if (producOptional.isPresent()) {
-                Product realProduct = producOptional.get();
-
-                // chec san pham da tung them vao gio hang truoc day hay chua
-
-                CartDetail oldDetail = this.cartDetailRepository.findByCartAndProduct(cart, realProduct); //
+            // find product
+            Optional<Product> productOptional = this.productRepository.findById(productId);
+            if (productOptional.isPresent()) {
+                Product realProduct = productOptional.get();
+                // Check has product existed in cart?
+                CartDetail oldDetail = this.cartDetailRepository.findByCartAndProduct(cart, realProduct);
 
                 if (oldDetail == null) {
+                    // Save cart detail
                     CartDetail cartDetail = new CartDetail();
-
                     cartDetail.setCart(cart);
                     cartDetail.setProduct(realProduct);
                     cartDetail.setPrice(realProduct.getPrice());
-                    cartDetail.setQuantity(1);
-
+                    cartDetail.setQuantity(quantity);
                     this.cartDetailRepository.save(cartDetail);
 
-                    // update cart (sum)
-                    int s = cart.getSum() + 1;
-                    cart.setSum(cart.getSum() + 1);
+                    int sumCart = cart.getSum() + 1;
+                    cart.setSum(sumCart);
+
                     this.cartRepository.save(cart);
-                    session.setAttribute("sum", s);
+                    session.setAttribute("sum", sumCart);
                 } else {
-                    oldDetail.setQuantity(oldDetail.getQuantity() + 1);
+                    oldDetail.setQuantity(oldDetail.getQuantity() + quantity);
                     this.cartDetailRepository.save(oldDetail);
                 }
 
-                //
-
-                // save user
             }
 
         }
+
     }
 
     public void handleUpdateCartBeforeCheckout(List<CartDetail> cartDetails) {
