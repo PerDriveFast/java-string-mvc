@@ -3,10 +3,14 @@ package vn.hoidanit.laptopshop.service;
 import vn.hoidanit.laptopshop.controller.admin.DashboardController;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
+import vn.hoidanit.laptopshop.domain.Order;
+import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
+import vn.hoidanit.laptopshop.repository.OrderDetailRepository;
+import vn.hoidanit.laptopshop.repository.OrderRepository;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
 
 import java.util.List;
@@ -37,14 +41,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartDetailRepository cartDetailRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
+
     private final UserService userService;
+    private final OrderService orderService;
 
     public ProductService(ProductRepository productRepository,
             CartRepository cartRepository,
             CartDetailRepository cartDetailRepository,
             UserService userService, DaoAuthenticationProvider authProvider,
             AuthenticationSuccessHandler customSuccessHandler, CustomUserDetailsService customUserDetailsService,
-            DashboardController dashboardController, SecurityFilterChain filterChain) {
+            DashboardController dashboardController, SecurityFilterChain filterChain,
+            OrderService orderService, OrderRepository orderRepository,
+            OrderDetailRepository orderDetailRepository) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.cartDetailRepository = cartDetailRepository;
@@ -54,6 +64,9 @@ public class ProductService {
         this.customUserDetailsService = customUserDetailsService;
         this.dashboardController = dashboardController;
         this.filterChain = filterChain;
+        this.orderService = orderService;
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     public List<Product> fetchProducts() {
@@ -167,4 +180,53 @@ public class ProductService {
             }
         }
     }
+
+    public void handlePlaceOrder(User user, HttpSession session,
+            String receiverName,
+            String receiverAddress,
+            String receiverPhone) {
+
+        // Create Order detail
+        // Step 1
+        Cart cart = this.cartRepository.findByUser(user);
+        if (cart != null) {
+            List<CartDetail> cartDetails = cart.getCartDetails();
+            if (cartDetails != null) {
+
+                // Create Order
+                Order order = new Order();
+                order.setUser(user);
+                order.setReceiverName(receiverName);
+                order.setReceiverAddress(receiverAddress);
+                order.setReceiverPhone(receiverPhone);
+                order.setStatus("PENDING");
+
+                double sum = 0;
+                for (CartDetail cd : cartDetails) {
+                    sum += cd.getPrice();
+                }
+                order.setTotalPrice(sum);
+                order = this.orderRepository.save(order);
+
+                for (CartDetail cd : cartDetails) {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setOrder(order);
+                    orderDetail.setProduct(cd.getProduct());
+                    orderDetail.setQuantity(cd.getQuantity());
+                    orderDetail.setPrice(cd.getPrice());
+                    this.orderDetailRepository.save(orderDetail);
+                }
+            }
+            // Step 2 delete cartDetail and cart
+            for (CartDetail cd : cartDetails) {
+                this.cartDetailRepository.deleteById(cd.getId());
+            }
+            this.cartRepository.deleteById(cart.getId());
+
+            // Step 3 Update session
+            // Thanh toan het cart nen set cart.sum = 0
+            session.setAttribute("sum", 0);
+        }
+    }
+
 }

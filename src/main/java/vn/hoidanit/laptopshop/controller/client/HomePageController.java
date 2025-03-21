@@ -15,9 +15,11 @@ import jakarta.validation.Valid;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.DTO.RegisterDTO;
+import vn.hoidanit.laptopshop.service.OrderService;
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UserService;
 
@@ -27,11 +29,15 @@ public class HomePageController {
     public final ProductService productService;
     public final UserService userService;
     public final PasswordEncoder passwordEncoder;
+    public final OrderService orderService;
 
-    public HomePageController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder) {
+    public HomePageController(ProductService productService,
+            UserService userService, PasswordEncoder passwordEncoder,
+            OrderService orderService) {
         this.productService = productService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.orderService = orderService;
     }
 
     @GetMapping("/")
@@ -77,4 +83,17 @@ public class HomePageController {
         return "client/auth/deny";
     }
 
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        User user = new User();
+
+        long id = (long) session.getAttribute("id");
+        user.setId(id);
+        // Cart cart = this.productService.getCartByUser(user);
+        List<Order> orders = this.orderService.findOrdersByUser(user);
+
+        model.addAttribute("orders", orders);
+        return "client/cart/order-history";
+    }
 }

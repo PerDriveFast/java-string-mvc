@@ -13,22 +13,13 @@ import jakarta.persistence.Table;
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private long quantity;
+    private double price;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-
-    public long id;
-
-    public long quantity;
-
-    public double price;
-
-    // product id long
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
 
     public Order getOrder() {
         return order;
@@ -37,6 +28,18 @@ public class OrderDetail {
     public void setOrder(Order order) {
         this.order = order;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     public long getId() {
         return id;
@@ -60,20 +63,6 @@ public class OrderDetail {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    @Override
-    public String toString() {
-        return "OrderDetail [order=" + order + ", id=" + id + ", quantity=" + quantity + ", price=" + price
-                + ", product=" + product + "]";
     }
 
 }
