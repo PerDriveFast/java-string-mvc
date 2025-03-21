@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.domain.DTO.ChangePasswordDTO;
 import vn.hoidanit.laptopshop.domain.DTO.RegisterDTO;
 import vn.hoidanit.laptopshop.service.OrderService;
 import vn.hoidanit.laptopshop.service.ProductService;
@@ -90,10 +92,52 @@ public class HomePageController {
 
         long id = (long) session.getAttribute("id");
         user.setId(id);
-        // Cart cart = this.productService.getCartByUser(user);
         List<Order> orders = this.orderService.findOrdersByUser(user);
 
         model.addAttribute("orders", orders);
         return "client/cart/order-history";
     }
+
+    @GetMapping("/change-password")
+    public String showChangePasswordPage(Model model) {
+        model.addAttribute("changePasswordDTO", new ChangePasswordDTO());
+        return "client/auth/change-password";
+    }
+
+    @PostMapping("/change-password")
+    public String handleChangePassword(@ModelAttribute("changePasswordDTO") @Valid ChangePasswordDTO changePasswordDTO,
+            BindingResult bindingResult,
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            return "client/auth/change-password";
+        }
+
+        HttpSession session = request.getSession(false);
+        Long userId = (Long) session.getAttribute("id");
+        if (userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "User not logged in.");
+            return "redirect:/login";
+        }
+
+        User user = userService.getUsersById(userId);
+        if (!passwordEncoder.matches(changePasswordDTO.getCurrentPassword(), user.getPassword())) {
+            bindingResult.rejectValue("currentPassword", "error.currentPassword", "Current password is incorrect");
+            return "client/auth/change-password";
+        }
+
+        if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Passwords do not match");
+            return "client/auth/change-password";
+        }
+
+        // Lưu mật khẩu mới
+        user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+        this.userService.handleSaveUser(user);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Password changed successfully!");
+        return "redirect:/change-password";
+    }
+
 }

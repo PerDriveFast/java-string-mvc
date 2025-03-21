@@ -86,4 +86,8 @@ public class UserService {
     public long countProducts() {
         return this.productRepository.count();
     }
+
+    public User getChangePassword(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
