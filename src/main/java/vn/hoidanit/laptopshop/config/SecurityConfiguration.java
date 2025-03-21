@@ -66,7 +66,7 @@ public class SecurityConfiguration {
                                                 .permitAll()
 
                                                 // ROLE_ADMIN
-                                                .requestMatchers("/", "/login", "/product/**",
+                                                .requestMatchers("/", "/login", "/product/**", "/register",
                                                                 "/client/**", "/css/**", "/js/**", "/images/**")
                                                 .permitAll()
 
