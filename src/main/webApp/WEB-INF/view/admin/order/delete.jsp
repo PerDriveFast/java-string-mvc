@@ -47,6 +47,7 @@
                                                         value="${id}" />
                                                 </div>
                                                 <button href="/admin/order" class="btn btn-success">Confirm</button>
+                                                <a href="/admin/order" class="btn btn-primary">Back</a>
                                             </form:form>
                                         </div>
                                     </div>

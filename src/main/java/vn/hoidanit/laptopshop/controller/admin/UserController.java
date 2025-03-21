@@ -72,7 +72,7 @@ public class UserController {
 
     @PostMapping("/admin/user/update")
     public String updateUser(Model model,
-            @ModelAttribute("userUpdate") @Valid User userU,
+            @ModelAttribute("newUser") @Valid User userU,
             BindingResult userBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
 
@@ -101,33 +101,34 @@ public class UserController {
     }
 
     @GetMapping("/admin/user/create")
-    public String get(Model model) {
+    public String getAdminPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
 
-    @PostMapping("/admin/user/create1")
-    public String CreateUserPage(Model model, @ModelAttribute("newUser") @Valid User user,
+    @PostMapping("/admin/user/create")
+    public String createUserPage(Model model,
+            @ModelAttribute("newUser") @Valid User hoidanNTD,
             BindingResult newUserBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
 
         List<FieldError> errors = newUserBindingResult.getFieldErrors();
         for (FieldError error : errors) {
-            System.out.println(">>>>" + error.getField() + " - " + error.getDefaultMessage());
+            System.out.println(">>> " + error.getField() + " - " + error.getDefaultMessage());
         }
-        // validate
-        if (newUserBindingResult.hasErrors()) {
-            return "/admin/user/create";
-        }
-        //
-        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-        String hashPassword = this.passwordEncoder.encode(user.getPassword());
 
-        user.setAvatar(avatar);
-        user.setPassword(hashPassword);
-        user.setRole(this.userService.getRoleByname(user.getRole().getName()));
-        // save
-        this.userService.handleSaveUser(user);
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
+
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+        String hashPassword = this.passwordEncoder.encode(hoidanNTD.getPassword());
+
+        hoidanNTD.setAvatar(avatar);
+        hoidanNTD.setPassword(hashPassword);
+        hoidanNTD.setRole(this.userService.getRoleByname(hoidanNTD.getRole().getName()));
+        // Save
+        this.userService.handleSaveUser(hoidanNTD);
         return "redirect:/admin/user";
     }
 

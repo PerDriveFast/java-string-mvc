@@ -69,7 +69,7 @@
                                                         path="fullName" />
                                                     <form:errors path="fullName" cssClass="invalid-feedback" />
                                                 </div>
-                                                <div class="mb-3">
+                                                <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Address:</label>
                                                     <form:input type="text" class="form-control" path="address" />
                                                 </div>
@@ -91,7 +91,10 @@
                                                         id="avatarPreview" />
                                                 </div>
 
-                                                <button type="submit" class="btn btn-secondary">Update</button>
+                                                <div class="col-12 mb-5">
+                                                    <button type="submit" class="btn btn-warning">Update</button>
+                                                    <a href="/admin/user" class="btn btn-primary">Back</a>
+                                                </div>
                                             </form:form>
                                         </div>
 

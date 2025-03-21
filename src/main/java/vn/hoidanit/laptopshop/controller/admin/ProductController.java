@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,25 +41,30 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product/create")
-    public String get(Model model) {
+    public String getCreateProductPage(Model model) {
         model.addAttribute("newProduct", new Product());
         return "admin/product/create";
     }
 
     @PostMapping("/admin/product/create")
-    public String CreateProductPage(Model model, @ModelAttribute("newProduct") @Valid Product product,
+    public String createNewProduct(Model model,
+            @ModelAttribute("newProduct") @Valid Product product,
             BindingResult newProductBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
 
-        // validate
-        if (newProductBindingResult.hasErrors()) {
-            return "/admin/product/create";
+        List<FieldError> errors = newProductBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(">>> " + error.getField() + " - " + error.getDefaultMessage());
         }
-        //
-        String image = this.uploadService.handleSaveUploadFile(file, "product");
 
-        product.setImage(image);
-        // save
+        if (newProductBindingResult.hasErrors()) {
+            return "admin/product/create";
+        }
+
+        String avatar = this.uploadService.handleSaveUploadFile(file, "product");
+        product.setImage(avatar);
+
+        // Save
         this.productService.createProduct(product);
 
         return "redirect:/admin/product";
@@ -118,6 +124,7 @@ public class ProductController {
             currentProduct.setPrice(product.getPrice());
             currentProduct.setQuantity(product.getQuantity());
             currentProduct.setSold(product.getSold());
+            currentProduct.setTarget(product.getTarget());
 
             // Nếu có file mới, cập nhật ảnh
             if (file != null && !file.isEmpty()) {

@@ -75,6 +75,7 @@
                                                     </div>
                                                     <div class="col-12 mb-5">
                                                         <button type="submit" class="btn btn-warning">Update</button>
+                                                        <a href="/admin/order" class="btn btn-primary">Back</a>
                                                     </div>
 
                                                 </form:form>
