@@ -16,6 +16,8 @@ import vn.hoidanit.laptopshop.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -67,6 +69,10 @@ public class ProductService {
         this.orderService = orderService;
         this.orderRepository = orderRepository;
         this.orderDetailRepository = orderDetailRepository;
+    }
+
+    public Page<Product> getAllProduct(Pageable page) {
+        return this.productRepository.findAll(page);
     }
 
     public List<Product> fetchProducts() {

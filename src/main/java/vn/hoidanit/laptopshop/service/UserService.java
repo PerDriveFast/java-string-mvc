@@ -2,8 +2,11 @@ package vn.hoidanit.laptopshop.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Role;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.domain.DTO.RegisterDTO;
@@ -29,6 +32,10 @@ public class UserService {
         this.roleRepository = roleRepository;
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+    }
+
+    public Page<User> getAllUsersPage(Pageable page) {
+        return this.userRepository.findAll(page);
     }
 
     public List<User> getAllUsers() {

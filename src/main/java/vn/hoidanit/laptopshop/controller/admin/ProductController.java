@@ -1,7 +1,11 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
+import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.ProductService;
@@ -34,10 +39,27 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getProduct(Model model) {
-        List<Product> prs = this.productService.fetchProducts();
-        model.addAttribute("products", prs);
+    public String getOrderTable(Model model, @RequestParam("page") Optional<String> optionalPage) {
+        int page = 1;
+        try {
+            if (optionalPage.isPresent()) {
+                page = Integer.parseInt(optionalPage.get());
+            } else {
+                // page = 1
+            }
+        } catch (Exception e) {
+            // page = 1
+        }
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        Page<Product> prs = this.productService.getAllProduct(pageable);
+        List<Product> listProduct = prs.getContent();
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", prs.getTotalPages());
+
+        model.addAttribute("products", listProduct);
         return "admin/product/show";
+
     }
 
     @GetMapping("/admin/product/create")
