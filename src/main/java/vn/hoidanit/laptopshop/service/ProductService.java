@@ -82,8 +82,12 @@ public class ProductService {
         return this.productRepository.findAll(page);
     }
 
-    public Page<Product> fetchProductsWithSpec(Pageable page, String name) {
-        return this.productRepository.findAll(ProductSpecs.nameLike(name), page);
+    // public Page<Product> fetchProductsWithSpec(Pageable page, String name) {
+    // return this.productRepository.findAll(ProductSpecs.nameLike(name), page);
+    // }
+
+    public Page<Product> fetchProductsWithSpec(Pageable page, double min) {
+        return this.productRepository.findAll(ProductSpecs.minPrice(min), page);
     }
 
     public Optional<Product> getProductById(Long id) {

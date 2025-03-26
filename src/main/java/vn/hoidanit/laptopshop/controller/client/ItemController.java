@@ -147,7 +147,11 @@ public class ItemController {
     @GetMapping("/products")
     public String getOrderTable(Model model,
             @RequestParam("page") Optional<String> optionalPage,
-            @RequestParam("name") Optional<String> optionalName) {
+            @RequestParam("name") Optional<String> optionalName,
+            @RequestParam("min-price") Optional<String> optionalMinPrice,
+            @RequestParam("max-price") Optional<String> optionalMaxPrice,
+            @RequestParam("factory") Optional<String> optionalFactory,
+            @RequestParam("target") Optional<String> optionalTarget) {
         int page = 1;
         try {
             if (optionalPage.isPresent()) {
@@ -159,13 +163,17 @@ public class ItemController {
             // page = 1
         }
 
-        Pageable pageable = PageRequest.of(page - 1, 6);
-        Page<Product> prs = this.productService.fetchProducts(pageable);
+        Pageable pageable = PageRequest.of(page - 1, 60);
+        // Page<Product> prs = this.productService.fetchProducts(pageable);
         // http://localhost:8080/products?page=1&name=chuoi
 
-        String name = optionalName.isPresent() ? optionalName.get() : "";
-        Page<Product> prs2 = this.productService.fetchProductsWithSpec(pageable,
-                name);
+        // String name = optionalName.isPresent() ? optionalName.get() : "";
+        // Page<Product> prs2 = this.productService.fetchProductsWithSpec(pageable,
+        // name);
+
+        double min = optionalMinPrice.isPresent() ? Double.parseDouble(optionalMinPrice.get()) : 0;
+        Page<Product> prs = this.productService.fetchProductsWithSpec(pageable, min);
+
         List<Product> listProduct = prs.getContent();
 
         model.addAttribute("products", listProduct);
