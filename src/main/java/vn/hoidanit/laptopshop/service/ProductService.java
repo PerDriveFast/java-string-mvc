@@ -6,6 +6,7 @@ import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
+import vn.hoidanit.laptopshop.domain.Product_;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -75,8 +77,8 @@ public class ProductService {
         return this.productRepository.findAll(page);
     }
 
-    public List<Product> fetchProducts() {
-        return this.productRepository.findAll();
+    public Page<Product> fetchProducts(Pageable page, String name) {
+        return this.productRepository.findAll(this.nameLike(name), page);
     }
 
     public Optional<Product> getProductById(Long id) {
@@ -97,6 +99,10 @@ public class ProductService {
 
     public Cart getCartByUser(User user) {
         return this.cartRepository.findByUser(user);
+    }
+
+    private Specification<Product> nameLike(String name) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Product_.NAME), "%" + name + "%");
     }
 
     public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
