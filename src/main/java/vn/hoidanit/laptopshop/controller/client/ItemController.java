@@ -159,10 +159,13 @@ public class ItemController {
             // page = 1
         }
 
-        String name = optionalName.get();
-
         Pageable pageable = PageRequest.of(page - 1, 6);
-        Page<Product> prs = this.productService.fetchProducts(pageable, name);
+        Page<Product> prs = this.productService.fetchProducts(pageable);
+        // http://localhost:8080/products?page=1&name=chuoi
+
+        String name = optionalName.isPresent() ? optionalName.get() : "";
+        Page<Product> prs2 = this.productService.fetchProductsWithSpec(pageable,
+                name);
         List<Product> listProduct = prs.getContent();
 
         model.addAttribute("products", listProduct);
